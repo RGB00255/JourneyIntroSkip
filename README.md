@@ -19,3 +19,5 @@ The idea of this project is simple: skip the introductory video of Journey witho
 * Visual Studio 2022 or 2026 Community (v143 toolset from VS2022) w/ Desktop development with C++ workload.
 * Git (for cloning Ultimate ASI Loader).
 * Windows 10 or 11 (64-bit).
+
+Test
