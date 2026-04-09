@@ -20,4 +20,6 @@ The idea of this project is simple: skip the introductory video of Journey witho
 * Git (for cloning Ultimate ASI Loader).
 * Windows 10 or 11 (64-bit).
 
+#
+
 Journey on Steam: https://store.steampowered.com/app/638230/Journey/
