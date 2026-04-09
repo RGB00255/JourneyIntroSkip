@@ -3,10 +3,14 @@ name: Build and Release
 on:
   push:
     branches: [ main, master ]
-    tags: [ 'v*' ]                    # Triggers on tags like v1.0, v1.1.2, etc.
+    tags: [ 'v*' ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:                  # Allows manual trigger
+  workflow_dispatch:
+
+# ←←← Add these permissions
+permissions:
+  contents: write     # Required to create/update releases and upload assets
 
 jobs:
   build:
@@ -30,16 +34,16 @@ jobs:
           Copy-Item -Path "x64\Release\JourneyIntroSkip.asi" -Destination "artifacts\" -Force
           Get-ChildItem artifacts
 
-      - name: Upload Build Artifacts (for manual download)
+      - name: Upload Build Artifacts (manual download)
         uses: actions/upload-artifact@v4
         with:
           name: JourneyIntroSkip-Build
           path: artifacts/
           if-no-files-found: error
 
-      # ====================== AUTOMATIC RELEASE ======================
+      # Automatic Release when pushing a tag (e.g. v1.0)
       - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')   # Only runs when you push a tag
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: |
@@ -51,10 +55,10 @@ jobs:
           body: |
             **Automatic build from GitHub Actions**
 
-            ### Files
-            - `dinput8.dll` — Official Ultimate ASI Loader (downloaded during build)
+            ### Included Files
+            - `dinput8.dll` — Official Ultimate ASI Loader (downloaded during pre-build)
             - `JourneyIntroSkip.asi` — Intro skip plugin built from this repository
 
-            Built on: ${{ github.event.repository.updated_at }}
+            Built from commit: ${{ github.sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
