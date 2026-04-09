@@ -1,0 +1,59 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: false   # not needed
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build Release x64
+        run: |
+          msbuild JourneyIntroSkip.sln /p:Configuration=Release /p:Platform=x64 /m /verbosity:minimal
+
+      - name: Prepare Release Assets
+        run: |
+          mkdir artifacts
+          copy x64\Release\dinput8.dll artifacts\
+          copy x64\Release\JourneyIntroSkip.asi artifacts\
+          dir artifacts
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: JourneyIntroSkip-Build
+          path: artifacts/
+          if-no-files-found: error
+
+      # Optional: Create GitHub Release when a tag is pushed (e.g. v1.0)
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/dinput8.dll
+            artifacts/JourneyIntroSkip.asi
+          draft: false
+          prerelease: false
+          name: Release ${{ github.ref_name }}
+          body: |
+            Automatic build from GitHub Actions.
+
+            Files included:
+            - `dinput8.dll` — Official Ultimate ASI Loader (downloaded during build)
+            - `JourneyIntroSkip.asi` — Intro skip plugin built from source in this repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
