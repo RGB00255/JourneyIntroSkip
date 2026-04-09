@@ -6,29 +6,30 @@ on:
     tags: [ 'v*' ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:     # Allows you to trigger manually from the Actions tab
 
 jobs:
   build:
-    runs-on: windows-latest     # More reliable than windows-2025-vs2026 for now
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: false   # not needed
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
       - name: Build Release x64
-        run: msbuild JourneyIntroSkip.sln /p:Configuration=Release /p:Platform=x64 /m /verbosity:minimal
+        run: |
+          msbuild JourneyIntroSkip.sln /p:Configuration=Release /p:Platform=x64 /m /verbosity:minimal
 
       - name: Prepare Release Assets
-        shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
-          Copy-Item -Path "x64\Release\dinput8.dll" -Destination "artifacts\" -Force
-          Copy-Item -Path "x64\Release\JourneyIntroSkip.asi" -Destination "artifacts\" -Force
-          Get-ChildItem artifacts
+          mkdir artifacts
+          copy x64\Release\dinput8.dll artifacts\
+          copy x64\Release\JourneyIntroSkip.asi artifacts\
+          dir artifacts
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
@@ -37,7 +38,7 @@ jobs:
           path: artifacts/
           if-no-files-found: error
 
-      # Automatic GitHub Release when you push a tag (e.g. v1.0)
+      # Optional: Create GitHub Release when a tag is pushed (e.g. v1.0)
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
@@ -52,7 +53,7 @@ jobs:
             Automatic build from GitHub Actions.
 
             Files included:
-            - `dinput8.dll` — Official Ultimate ASI Loader (downloaded during pre-build)
-            - `JourneyIntroSkip.asi` — Intro skip plugin built from this repo
+            - `dinput8.dll` — Official Ultimate ASI Loader (downloaded during build)
+            - `JourneyIntroSkip.asi` — Intro skip plugin built from source in this repo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
