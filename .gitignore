@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# OTHER (Added by repo maintainer)
+# Residual build files
+JourneyIntroSkip/x64
+JourneyIntroSkip/dinput8.dll
+JourneyIntroSkip/dinput8-x64.SHA512
