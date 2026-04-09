@@ -1,6 +1,10 @@
 @echo off
 setlocal
 
+REM Clean up any old copies in the output directory
+if exist "%~1JourneyIntroSkip.asi" del "%~1JourneyIntroSkip.asi"
+if exist "%~1dinput8.dll" del "%~1dinput8.dll"
+
 echo === Downloading official Ultimate ASI Loader x64 dinput8.dll directly from GitHub releases ===
 
 set TARGET_DIR=%~1

@@ -116,6 +116,19 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
     </Link>
+    <PostBuildEvent>
+      <Command>REM Final cleanup + rename
+if exist "$(TargetDir)JourneyIntroSkip.asi" del "$(TargetDir)JourneyIntroSkip.asi"
+if exist "$(TargetDir)JourneyIntroSkip.dll" rename "$(TargetDir)JourneyIntroSkip.dll" "JourneyIntroSkip.asi"</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>REM Clean up old output files before building/downloading
+if exist "$(TargetDir)JourneyIntroSkip.asi" del "$(TargetDir)JourneyIntroSkip.asi"
+if exist "$(TargetDir)dinput8.dll" del "$(TargetDir)dinput8.dll"
+
+REM Call the download script
+call "$(ProjectDir)prebuild.bat" "$(TargetDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -134,10 +147,17 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PreBuildEvent>
-      <Command>call "$(ProjectDir)prebuild.bat" "$(TargetDir)"</Command>
+      <Command>REM Clean up old output files before building/downloading
+if exist "$(TargetDir)JourneyIntroSkip.asi" del "$(TargetDir)JourneyIntroSkip.asi"
+if exist "$(TargetDir)dinput8.dll" del "$(TargetDir)dinput8.dll"
+
+REM Call the download script
+call "$(ProjectDir)prebuild.bat" "$(TargetDir)"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>if exist "$(TargetDir)$(TargetName).dll" rename "$(TargetDir)$(TargetName).dll" "$(TargetName).asi"</Command>
+      <Command>REM Final cleanup + rename
+if exist "$(TargetDir)JourneyIntroSkip.asi" del "$(TargetDir)JourneyIntroSkip.asi"
+if exist "$(TargetDir)JourneyIntroSkip.dll" rename "$(TargetDir)JourneyIntroSkip.dll" "JourneyIntroSkip.asi"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
