@@ -14,8 +14,6 @@
 
 The idea of this project is simple: skip the introductory video of Journey without modifying any existing files. This is a DLL meant file to be loaded asap, so this project takes advantage of [Ultimate ASI Loader](https://github.com/ThirteenAG/Ultimate-ASI-Loader) which allows that. This project will automatically download the latest x64 version of dinput8.dll from that repo, build the plugin, and put both dinput8.dll and JourneyIntroSkip.dll (renamed to JourneyIntroSkip.asi) in the build output folder for easy managing; just copy and paste from build folder (pdb not required) into your game and it works!
 
-The idea of this project is simple: skip the introductory video of Journey without modifying any existing files. This is a DLL meant file to be loaded asap, so this project takes advantage of [Ultimate ASI Loader](https://github.com/ThirteenAG/Ultimate-ASI-Loader) which allows that. This project will automatically download the latest x64 version of dinput8.dll from that repo, build the plugin, and put both dinput8.dll and JourneyIntroSkip.dll (renamed to JourneyIntroSkip.asi) in the build output folder for easy managing; just copy and paste from build folder (pdb not required) into your game and it works!
-
 ### Building requirements:
 
 * Visual Studio 2022 or 2026 Community (v143 toolset from VS2022) w/ Desktop development with C++ workload.
