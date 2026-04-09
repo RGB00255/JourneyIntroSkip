@@ -7,10 +7,10 @@ The idea of this project is simple: skip the introductory video of Journey witho
 ### How to install:
 
 1. Download the [latest release](https://github.com/RGB00255/JourneyIntroSkip/releases/latest).
-2. Extract files to Journey game folder.*<sup><small>1</small></sup>
+2. Extract files to Journey game folder.<sup><small>1</small></sup>
 3. Play the game. (Now you get to it faster!)
 
-\*<sup><small>1</small></sup>: If using Steam: right click the game -> Manage -> Browse Local Files.
+<sup><small>1</small></sup>: If using Steam: right click the game -> Manage -> Browse Local Files.
 
 ### Building requirements:
 
