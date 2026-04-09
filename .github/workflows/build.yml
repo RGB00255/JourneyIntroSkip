@@ -8,9 +8,8 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
-# ←←← Add these permissions
 permissions:
-  contents: write     # Required to create/update releases and upload assets
+  contents: write
 
 jobs:
   build:
@@ -30,34 +29,45 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          
+          # Copy the built files
           Copy-Item -Path "x64\Release\dinput8.dll" -Destination "artifacts\" -Force
           Copy-Item -Path "x64\Release\JourneyIntroSkip.asi" -Destination "artifacts\" -Force
+          
+          # Create a nice zip with version in the filename (if tag exists)
+          $version = if ($env:GITHUB_REF -match 'refs/tags/v(.*)') { $matches[1] } else { 'latest' }
+          $zipName = "JourneyIntroSkip-v$version.zip"
+          
+          Compress-Archive -Path "artifacts\dinput8.dll", "artifacts\JourneyIntroSkip.asi" `
+                           -DestinationPath "artifacts\$zipName" -Force
+          
           Get-ChildItem artifacts
 
-      - name: Upload Build Artifacts (manual download)
+      - name: Upload Build Artifacts (for manual download)
         uses: actions/upload-artifact@v4
         with:
           name: JourneyIntroSkip-Build
           path: artifacts/
           if-no-files-found: error
 
-      # Automatic Release when pushing a tag (e.g. v1.0)
+      # Automatic Release when pushing a tag
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            artifacts/dinput8.dll
-            artifacts/JourneyIntroSkip.asi
+          files: artifacts/JourneyIntroSkip-*.zip
           draft: false
           prerelease: false
           name: Release ${{ github.ref_name }}
           body: |
             **Automatic build from GitHub Actions**
 
-            ### Included Files
-            - `dinput8.dll` — Official Ultimate ASI Loader (downloaded during pre-build)
-            - `JourneyIntroSkip.asi` — Intro skip plugin built from this repository
+            ### Download
+            `JourneyIntroSkip-${{ github.ref_name }}.zip` — contains both files
+
+            ### Files inside the zip:
+            - `dinput8.dll` — Official Ultimate ASI Loader
+            - `JourneyIntroSkip.asi` — Intro skip plugin
 
             Built from commit: ${{ github.sha }}
         env:
