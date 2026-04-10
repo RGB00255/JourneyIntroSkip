@@ -364,5 +364,5 @@ FodyWeavers.xsd
 
 # OTHER (Added by repo maintainer)
 # Residual build files
-JourneyIntroSkip/dinput8.dll
-JourneyIntroSkip/dinput8-x64.SHA512
+dinput8.dll
+dinput8-x64.SHA512
