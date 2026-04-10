@@ -1,6 +1,6 @@
 # JourneyIntroSkip
 
-**Disclaimer**: I did not build this myself. This project was built using generative AI (Grok) based off a Hex edit listed here: https://www.pcgamingwiki.com/wiki/Journey#Essential_improvements. 
+**Disclaimer**: I did not build this myself. The code used in this project was created using generative AI (Grok) based off a Hex edit listed here: https://www.pcgamingwiki.com/wiki/Journey#Essential_improvements. 
 
 ### How to install:
 
